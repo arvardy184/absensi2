@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, TouchableOpacity, Alert } from 'react-native';
+import { Text, TouchableOpacity, Alert, Platform } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { RootStackParamList, StudentStackParamList, AdminStackParamList, StudentTabParamList } from './types';
@@ -24,20 +24,37 @@ const StudentTabNavigator = (): JSX.Element => {
   const {  logout } = useStudentAuth();
   
   const handleLogout = () => {
-    Alert.alert(
-      'Konfirmasi Logout',
-      'Apakah Anda yakin ingin keluar?',
-      [
-        { text: 'Batal', style: 'cancel' },
-        { 
-          text: 'Logout', 
-          style: 'destructive',
-          onPress: async () => {
-            await logout();
+    console.log('🔧 Logout button pressed'); // Debug log
+    
+    // Web-compatible logout confirmation
+    if (Platform.OS === 'web') {
+      const confirmed = window.confirm('Apakah Anda yakin ingin keluar?');
+      if (confirmed) {
+        console.log('🔧 Logout confirmed (web), calling logout function');
+        logout().catch(error => console.error('🔧 Logout error:', error));
+      }
+    } else {
+      Alert.alert(
+        'Konfirmasi Logout',
+        'Apakah Anda yakin ingin keluar?',
+        [
+          { text: 'Batal', style: 'cancel' },
+          { 
+            text: 'Logout', 
+            style: 'destructive',
+            onPress: async () => {
+              console.log('🔧 Logout confirmed, calling logout function');
+              try {
+                await logout();
+                console.log('🔧 Logout successful');
+              } catch (error) {
+                console.error('🔧 Logout error:', error);
+              }
+            }
           }
-        }
-      ]
-    );
+        ]
+      );
+    }
   };
 
   const LogoutButton = () => (
@@ -51,13 +68,17 @@ const StudentTabNavigator = (): JSX.Element => {
         paddingVertical: 6,
         borderRadius: 20,
         backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        minHeight: 32, // Ensure clickable area
+        ...(Platform.OS === 'web' && { cursor: 'pointer' }), // Web cursor
       }}
+      activeOpacity={0.7}
     >
       <Text style={{ fontSize: 14, marginRight: 4 }}>🚪</Text>
       <Text style={{ 
         color: COLORS.text.white, 
         fontSize: 12, 
-        fontWeight: '600' 
+        fontWeight: '600',
+        ...(Platform.OS === 'web' && { userSelect: 'none' }), // Prevent text selection on web
       }}>
         Logout
       </Text>

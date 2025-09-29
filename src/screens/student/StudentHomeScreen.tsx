@@ -8,7 +8,7 @@ import { getToday } from '@/utils/date';
 import { getResponsivePadding, responsive, isDesktopScreen, isTabletScreen } from '@/utils/responsive';
 
 const StudentHomeScreen: React.FC = () => {
-  const { student } = useStudentAuth();
+  const { student, logout } = useStudentAuth();
   const [selectedStatus, setSelectedStatus] = useState<AttendanceStatus>('HADIR');
   const [reason, setReason] = useState('');
   const [timeValidation, setTimeValidation] = useState<TimeValidation | null>(null);
@@ -86,8 +86,30 @@ const StudentHomeScreen: React.FC = () => {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <View style={styles.header}>
-        <Text style={styles.welcome}>Halo, {student?.name}! 👋</Text>
-        <Text style={styles.date}>Hari ini: {getToday()}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View>
+            <Text style={styles.welcome}>Halo, {student?.name}! 👋</Text>
+            <Text style={styles.date}>Hari ini: {getToday()}</Text>
+          </View>
+          {/* Temporary debug logout button */}
+          <TouchableOpacity
+            onPress={async () => {
+              console.log('🔧 Debug logout pressed');
+              const confirmed = confirm ? confirm('Logout?') : true;
+              if (confirmed) {
+                await logout();
+              }
+            }}
+            style={{
+              backgroundColor: COLORS.error,
+              paddingHorizontal: 12,
+              paddingVertical: 6,
+              borderRadius: 6,
+            }}
+          >
+            <Text style={{ color: 'white', fontSize: 12 }}>Debug Logout</Text>
+          </TouchableOpacity>
+        </View>
 
         {/* Already attended today info */}
         {hasAttendedToday && (
