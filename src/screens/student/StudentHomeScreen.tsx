@@ -91,24 +91,7 @@ const StudentHomeScreen: React.FC = () => {
             <Text style={styles.welcome}>Halo, {student?.name}! 👋</Text>
             <Text style={styles.date}>Hari ini: {getToday()}</Text>
           </View>
-          {/* Temporary debug logout button */}
-          <TouchableOpacity
-            onPress={async () => {
-              console.log('🔧 Debug logout pressed');
-              const confirmed = confirm ? confirm('Logout?') : true;
-              if (confirmed) {
-                await logout();
-              }
-            }}
-            style={{
-              backgroundColor: COLORS.error,
-              paddingHorizontal: 12,
-              paddingVertical: 6,
-              borderRadius: 6,
-            }}
-          >
-            <Text style={{ color: 'white', fontSize: 12 }}>Debug Logout</Text>
-          </TouchableOpacity>
+    
         </View>
 
         {/* Already attended today info */}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView, Platform } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { AdminStackParamList } from '@/navigation/types';
@@ -13,24 +13,54 @@ const AdminDashboardScreen: React.FC = () => {
   const timeInfo = getAttendanceTimeInfo();
 
   const handleLogout = () => {
-    Alert.alert(
-      'Logout',
-      'Apakah Anda yakin ingin keluar?',
-      [
-        { text: 'Batal', style: 'cancel' },
-        { text: 'Logout', onPress: logout, style: 'destructive' },
-      ]
-    );
+    console.log('🔧 Admin logout button pressed'); // Debug log
+    
+    // Web-compatible logout confirmation
+    if (Platform.OS === 'web') {
+      const confirmed = window.confirm('Apakah Anda yakin ingin keluar?');
+      if (confirmed) {
+        console.log('🔧 Admin logout confirmed (web), calling logout function');
+        logout().catch(error => console.error('🔧 Admin logout error:', error));
+      }
+    } else {
+      Alert.alert(
+        'Logout',
+        'Apakah Anda yakin ingin keluar?',
+        [
+          { text: 'Batal', style: 'cancel' },
+          { 
+            text: 'Logout', 
+            onPress: async () => {
+              console.log('🔧 Admin logout confirmed, calling logout function');
+              try {
+                await logout();
+                console.log('🔧 Admin logout successful');
+              } catch (error) {
+                console.error('🔧 Admin logout error:', error);
+              }
+            }, 
+            style: 'destructive' 
+          },
+        ]
+      );
+    }
   };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.welcome}>Selamat datang, Admin! 👋</Text>
-        <Text style={styles.subtitle}>Kelola sistem absensi mahasiswa</Text>
-        <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-          <Text style={styles.logoutButtonText}>🚪 Logout</Text>
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <View>
+            <Text style={styles.welcome}>Selamat datang, Admin! 👋</Text>
+            <Text style={styles.subtitle}>Kelola sistem absensi mahasiswa</Text>
+          </View>
+          <View style={{ alignItems: 'flex-end' }}>
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+              <Text style={styles.logoutButtonText}>🚪 Logout</Text>
+            </TouchableOpacity>
+         
+          </View>
+        </View>
       </View>
 
       <View style={styles.mainCard}>

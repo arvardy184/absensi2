@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TextInput, FlatList, RefreshControl, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, TextInput, FlatList, RefreshControl, TouchableOpacity, Alert, Platform } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { ATTENDANCE_STATUSES, AttendanceStatus, COLORS, SPACING, RADIUS, CLASS_OPTIONS } from '@/constants';
 import { getAttendanceAggregation } from '@/services/AttendanceService';
@@ -48,20 +48,37 @@ const AdminRecapScreen: React.FC = () => {
   };
 
   const handleLogout = () => {
-    Alert.alert(
-      'Konfirmasi Logout',
-      'Apakah Anda yakin ingin keluar?',
-      [
-        { text: 'Batal', style: 'cancel' },
-        { 
-          text: 'Logout', 
-          style: 'destructive',
-          onPress: async () => {
-            await logout();
+    console.log('🔧 Admin RecapScreen logout button pressed'); // Debug log
+    
+    // Web-compatible logout confirmation
+    if (Platform.OS === 'web') {
+      const confirmed = window.confirm('Apakah Anda yakin ingin keluar?');
+      if (confirmed) {
+        console.log('🔧 Admin RecapScreen logout confirmed (web), calling logout function');
+        logout().catch(error => console.error('🔧 Admin RecapScreen logout error:', error));
+      }
+    } else {
+      Alert.alert(
+        'Konfirmasi Logout',
+        'Apakah Anda yakin ingin keluar?',
+        [
+          { text: 'Batal', style: 'cancel' },
+          { 
+            text: 'Logout', 
+            style: 'destructive',
+            onPress: async () => {
+              console.log('🔧 Admin RecapScreen logout confirmed, calling logout function');
+              try {
+                await logout();
+                console.log('🔧 Admin RecapScreen logout successful');
+              } catch (error) {
+                console.error('🔧 Admin RecapScreen logout error:', error);
+              }
+            }
           }
-        }
-      ]
-    );
+        ]
+      );
+    }
   };
 
   return (

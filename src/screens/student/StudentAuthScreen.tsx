@@ -4,6 +4,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 import { StudentStackParamList } from '@/navigation/types';
 import { useStudentAuth } from '@/context/StudentAuthContext';
+import { COLORS, SPACING, RADIUS } from '@/constants';
 
 const StudentAuthScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<StudentStackParamList, 'StudentAuth'>>();
@@ -39,29 +40,43 @@ const StudentAuthScreen: React.FC = () => {
     }
   };
 
+  const goBackToRoleSelection = () => {
+    // Navigate back to root and reset to role selection
+    navigation.getParent()?.navigate('RoleSelection');
+  };
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Mahasiswa</Text>
-      <TextInput
-        placeholder="NIM"
-        value={nim}
-        onChangeText={setNim}
-        style={styles.input}
-        autoCapitalize="none"
-      />
-      <TextInput
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.primaryButton} onPress={handleLogin} disabled={submitting}>
-        <Text style={styles.primaryButtonText}>{submitting ? 'Memuat...' : 'Masuk'}</Text>
+      {/* Back to Role Selection Button */}
+      <TouchableOpacity style={styles.backButton} onPress={goBackToRoleSelection}>
+        <Text style={styles.backButtonText}>← Pilih Role Lain</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('StudentRegister')}>
-        <Text style={styles.link}>Belum punya akun? Registrasi</Text>
-      </TouchableOpacity>
+
+      <View style={styles.content}>
+        <Text style={styles.title}>Login Mahasiswa</Text>
+        <Text style={styles.subtitle}>Masuk dengan NIM dan password Anda</Text>
+        
+        <TextInput
+          placeholder="NIM"
+          value={nim}
+          onChangeText={setNim}
+          style={styles.input}
+          autoCapitalize="none"
+        />
+        <TextInput
+          placeholder="Password"
+          value={password}
+          onChangeText={setPassword}
+          style={styles.input}
+          secureTextEntry
+        />
+        <TouchableOpacity style={styles.primaryButton} onPress={handleLogin} disabled={submitting}>
+          <Text style={styles.primaryButtonText}>{submitting ? 'Memuat...' : 'Masuk'}</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('StudentRegister')}>
+          <Text style={styles.link}>Belum punya akun? Registrasi</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -69,8 +84,34 @@ const StudentAuthScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 24,
-    justifyContent: 'center'
+    backgroundColor: COLORS.background,
+  },
+  backButton: {
+    marginTop: 50,
+    marginLeft: 20,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: RADIUS.md,
+    backgroundColor: COLORS.surface,
+    alignSelf: 'flex-start',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  backButtonText: {
+    color: COLORS.primary,
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  content: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: SPACING.xxl,
+    maxWidth: 400,
+    alignSelf: 'center',
+    width: '100%',
   },
   loadingContainer: {
     flex: 1,
@@ -78,9 +119,17 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: '700',
-    marginBottom: 24
+    marginBottom: SPACING.sm,
+    textAlign: 'center',
+    color: COLORS.text.primary,
+  },
+  subtitle: {
+    fontSize: 16,
+    color: COLORS.text.secondary,
+    textAlign: 'center',
+    marginBottom: SPACING.xxxl,
   },
   input: {
     borderWidth: 1,

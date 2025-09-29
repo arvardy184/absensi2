@@ -229,7 +229,11 @@ const RootNavigator = (): JSX.Element => {
   }
   
   return (
-    <RootStack.Navigator key={navigatorKey} screenOptions={{ headerShown: false }}>
+    <RootStack.Navigator 
+      key={navigatorKey} 
+      screenOptions={{ headerShown: false }}
+      initialRouteName="RoleSelection"
+    >
       <RootStack.Screen name="RoleSelection" component={RoleSelectionScreen} />
       <RootStack.Screen name="StudentFlow" component={StudentStackNavigator} />
       <RootStack.Screen name="AdminFlow" component={AdminStackNavigator} />
