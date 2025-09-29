@@ -6,6 +6,7 @@ import { getAttendanceAggregation } from '@/services/AttendanceService';
 import { AggregatedAttendanceRow } from '@/services/AttendanceService';
 import Dropdown from '@/components/Dropdown';
 import { useAdminAuth } from '@/context/AdminAuthContext';
+import { getResponsivePadding, responsive, isMobileScreen } from '@/utils/responsive';
 
 const AdminRecapScreen: React.FC = () => {
   const { logout } = useAdminAuth();
@@ -174,7 +175,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    padding: SPACING.xxl,
+    padding: getResponsivePadding(),
   },
   header: {
     marginBottom: SPACING.xl,
@@ -247,7 +248,12 @@ const styles = StyleSheet.create({
     color: COLORS.error,
   },
   filterRow: {
-    flexDirection: 'row',
+    flexDirection: responsive({
+      mobile: 'column',
+      tablet: 'row',
+      desktop: 'row',
+      default: 'column',
+    }),
     gap: SPACING.md,
     marginBottom: SPACING.md,
   },

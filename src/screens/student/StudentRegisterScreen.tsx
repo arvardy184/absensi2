@@ -6,6 +6,7 @@ import { StudentStackParamList } from '@/navigation/types';
 import { useStudentAuth } from '@/context/StudentAuthContext';
 import { CLASS_OPTIONS, COLORS, SPACING, RADIUS } from '@/constants';
 import Dropdown from '@/components/Dropdown';
+import { getResponsivePadding, isDesktopScreen, isTabletScreen } from '@/utils/responsive';
 
 const StudentRegisterScreen: React.FC = () => {
   const navigation = useNavigation<StackNavigationProp<StudentStackParamList, 'StudentRegister'>>();
@@ -126,7 +127,10 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    padding: SPACING.xxl,
+    padding: getResponsivePadding(),
+    maxWidth: isDesktopScreen() ? 600 : isTabletScreen() ? 500 : '100%',
+    alignSelf: 'center',
+    width: '100%',
   },
   header: {
     marginBottom: SPACING.xxxl,

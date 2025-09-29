@@ -5,6 +5,7 @@ import { useStudentAuth } from '@/context/StudentAuthContext';
 import { saveAttendanceRecord, getAttendanceByStudentAndDate } from '@/services/AttendanceService';
 import { validateAttendanceTime, getAttendanceTimeInfo, TimeValidation } from '@/utils/attendanceTime';
 import { getToday } from '@/utils/date';
+import { getResponsivePadding, responsive, isDesktopScreen, isTabletScreen } from '@/utils/responsive';
 
 const StudentHomeScreen: React.FC = () => {
   const { student } = useStudentAuth();
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,
-    padding: SPACING.xxl,
+    padding: getResponsivePadding(),
   },
   header: {
     marginBottom: SPACING.xxl,
@@ -221,7 +222,13 @@ const styles = StyleSheet.create({
   statusGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginHorizontal: -SPACING.xs,
+    gap: SPACING.md,
+    justifyContent: responsive({
+      mobile: 'center',
+      tablet: 'space-between',
+      desktop: 'flex-start',
+      default: 'center',
+    }),
   },
   statusChip: {
     borderWidth: 2,
@@ -229,14 +236,14 @@ const styles = StyleSheet.create({
     borderRadius: RADIUS.lg,
     paddingHorizontal: SPACING.lg,
     paddingVertical: SPACING.md,
-    margin: SPACING.xs,
-    minWidth: '45%',
     alignItems: 'center',
     elevation: 1,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
+    minWidth: isDesktopScreen() ? 150 : isTabletScreen() ? '22%' : '45%',
+    flex: isTabletScreen() && !isDesktopScreen() ? 1 : 0,
   },
   statusChipActive: {
     borderColor: 'transparent',

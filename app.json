@@ -25,7 +25,17 @@
     },
     "web": {
       "bundler": "metro",
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "name": "Sistem Absensi Kelas",
+      "shortName": "Absensi",
+      "lang": "id",
+      "scope": "/",
+      "themeColor": "#2196F3",
+      "backgroundColor": "#ffffff",
+      "display": "standalone",
+      "orientation": "portrait",
+      "startUrl": "/",
+      "crossorigin": "use-credentials"
     },
     "plugins": [
       "expo-font"
