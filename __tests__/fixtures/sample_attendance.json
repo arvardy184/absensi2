@@ -1,0 +1,19 @@
+{
+  "student": {
+    "nim": "123456",
+    "name": "Rina Nur",
+    "class": "TI-1A"
+  },
+  "records": [
+    {
+      "date": "2024-05-01",
+      "status": "HADIR",
+      "reason": null
+    },
+    {
+      "date": "2024-05-02",
+      "status": "SAKIT",
+      "reason": "Demam"
+    }
+  ]
+}
